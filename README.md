@@ -2,7 +2,7 @@
 
 把 **Google Gemini 网页端（gemini.google.com）** 接进 DeepSeek Harness：在 DSH 设置里点一下「登录 Google」即可完成登录，插件自动把登录态写入内置反代内核，并注册原生 `gemini-web` provider。不需要手工跑程序、不需要复制粘贴 cookie。
 
-挂上登录态后可用 `gemini-3.1-pro`、`gemini-3.8-flash`、各模型的扩展思考版，以及生图 / 生音乐 / 生视频等模型；不登录也能用匿名的两个 Flash 模型。
+内核一共提供 14 个模型：`gemini-3.8 / 3.7 / 3.6` Flash 与 `3.5` Flash Lite（各带扩展思考版）、`gemini-3.1-pro`（含思考版），以及生图 / 音乐 / 画布 / 视频。**暴露哪些给 DSH 由设置页勾选**，没勾选就不会出现在会话窗口的模型选择器里。
 
 ## 安装
 
@@ -24,6 +24,17 @@ dsh plugin --profile web remove dsh-gemini-web
 
 环境要求：已安装 dsh CLI（`dsh --version` 可查版本）、Node ≥ 22；`dsh plugin` 内部使用 pnpm。
 
+## 更新插件
+
+GitHub 依赖重复执行 `add` **不会**拉到新版本（pnpm 会报 `Already up to date`），要先卸再装：
+
+```bash
+dsh plugin --profile web remove dsh-gemini-web
+dsh plugin --profile web add github:dtsummery/dsh-gemini-web
+```
+
+装完**必须重启 DSH Desktop**：host 端代码只在启动时装配，刷新页面只会更新浏览器端（界面），所以会出现「新界面 + host 还是旧逻辑」的错位。
+
 插件的数据都放在 `~/.dsh/gemini-web/`：
 
 | 路径 | 用途 |
@@ -39,7 +50,7 @@ dsh plugin --profile web remove dsh-gemini-web
 2. 打开 **设置 → Gemini 网页端**（插件自带一页独立设置），确认「启用 Gemini 网页端 provider」已勾选。
 3. 首次使用点 **下载 / 更新内核**，等页面显示「内核 运行中」。
 4. 点 **登录 Google**，在弹出的浏览器窗口里正常登录 Gemini，然后回到设置页点 **我已完成登录**。
-5. 在 **模型** 卡片里勾选要暴露给 DSH 的模型（默认 `gemini-3.8-flash`、`gemini-3.1-pro`），点 **保存模型选择**；保存后会话窗口的模型选择器里就能选它们。
+5. 在 **模型** 卡片里勾选要暴露给 DSH 的模型（默认 `gemini-3.8-flash`、`gemini-3.1-pro`；可多选，内核提供的 14 个都在列表里，也可以「全选 / 默认 / 撤销」），点 **保存模型选择** —— 保存即时生效，会话窗口的模型选择器马上能选到，不需要重启。
 6. 模型列表里出现 **Gemini 网页端** 下的模型即可直接使用。
 
 登录成功后插件会自动开启 **cookie 保活**，设置页显示「保活 运行中」：Google 换发登录票时会自动回写内核，正常情况下不需要再手动登录；想立刻检查可点 **立即保活**。
@@ -64,6 +75,7 @@ dsh plugin --profile web remove dsh-gemini-web
 | 现象 | 处理 |
 | --- | --- |
 | 页面显示「尚未下载反代内核」 | 点「下载 / 更新内核」（走配置的出口代理） |
+| 设置页改了没反应 / 模型列表变回原样 | 先确认已**重启 DSH Desktop**：host 端代码只在启动时装配，只刷新页面会出现「新界面 + 旧逻辑」；确实是新版仍不生效就带 `~/.dsh/settings.yaml` 里 `gemini-web:` 段一起反馈 |
 | 连通性测试失败 | 多为出口代理不可用；换代理地址或确认代理软件在运行，然后点「重启内核」 |
 | 选 Pro 报错 | 未登录或登录态失效，重新走一次「登录 Google → 我已完成登录」 |
 | 页面显示「保活 待命 / 保活失败」 | 看该行备注里的原因：还没登录、保活浏览器起不来、或 profile 被别的窗口占用；点「立即保活」重试 |
