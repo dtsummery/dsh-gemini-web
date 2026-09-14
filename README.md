@@ -6,20 +6,23 @@
 
 ## 安装
 
-在 DSH 的 web profile 目录里从 GitHub 安装：
+用 dsh 自带的插件命令从 GitHub 安装：
 
 ```bash
-cd ~/.dsh/profiles/web
-pnpm add github:dtsummery/dsh-gemini-web
+dsh plugin --profile web add github:dtsummery/dsh-gemini-web
 ```
 
-或先把依赖写进 `~/.dsh/profiles/web/package.json`，再执行 `pnpm install`：
+- `web` 是目标 profile 名（DSH Desktop 默认 profile 就叫 `web`）。
+- 这个命令会顺带把插件登记进该 profile `package.json` 的 `dsh.profile.bundles`，不需要手工改配置。
+- 输出里出现 `+ dsh-gemini-web github:dtsummery/dsh-gemini-web` 即为成功，然后**重启 DSH Desktop**。
 
-```json
-"dsh-gemini-web": "github:dtsummery/dsh-gemini-web"
+卸载用同一套命令：
+
+```bash
+dsh plugin --profile web remove dsh-gemini-web
 ```
 
-确认 `dsh-gemini-web` 已列在同一个 `package.json` 的 `dsh.profile.bundles` 里，然后**重启 DSH Desktop**（新增 bundle 需要重新装配）。
+环境要求：已安装 dsh CLI（`dsh --version` 可查版本）、Node ≥ 22；`dsh plugin` 内部使用 pnpm。
 
 插件的数据都放在 `~/.dsh/gemini-web/`：
 
