@@ -1,6 +1,6 @@
 {
   "name": "dsh-gemini-web",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Gemini 网页端（gemini.google.com）接入 DeepSeek Harness：设置里一键免粘贴登录，插件托管反代内核并注册 gemini-web provider",
   "type": "module",
   "license": "MIT",
