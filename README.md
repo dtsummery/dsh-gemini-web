@@ -10,7 +10,7 @@ DSH provider: gemini-web  ──HTTP/SSE──▶  本机反代内核（gemini-w
 受控 Chrome/Edge 窗口  ──CDP 读 cookie──▶  内核 Cookie 池（登录凭据）
 ```
 
-- **host 侧**（`lib/index.js`）：托管内核进程（启动、健康检查、卸载时回收）、注册 `gemini-web` provider、提供设置页用的 HTTP 路由、cookie 保活回写。
+- **host 侧**（`lib/index.js`）：托管内核进程（启动、健康检查、看门狗自动拉起、卸载时回收）、注册 `gemini-web` provider、提供设置页用的 HTTP 路由、cookie 保活回写。
 - **保活**（`lib/keepalive.js`）：常驻一个**无窗口** headless 浏览器打开 gemini.google.com，让浏览器自己维持 Google 设备绑定会话的登录票轮转，票一变就把最新 cookie 回写内核。
 - **登录**（`lib/edge-login.js`）：拉起一个插件专属 profile 的 Chrome/Edge，打开 gemini.google.com，轮询到登录态 cookie 齐备后自动抓取并写入内核，全程免粘贴。
 - **适配器**（`lib/adapter.js`）：把内核的 OpenAI 兼容 SSE 翻译成 DSH 的 StreamChunk（文本 / thinking / tool call / usage）。
