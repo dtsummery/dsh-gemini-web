@@ -22,7 +22,7 @@ dsh plugin --profile web add github:dtsummery/dsh-gemini-web
 dsh plugin --profile web remove dsh-gemini-web
 ```
 
-环境要求：已安装 dsh CLI（`dsh --version` 可查版本）、Node ≥ 22；`dsh plugin` 内部使用 pnpm。
+环境要求：DSH **0.2.x**（`dsh --version` 可查版本；设置页走 0.2 的 `Config` / `configForms` 模型，0.1.x 上会因 `@deepseek-ai/dsh-settings` 没有 `installSettingsSection` 而整包加载失败）、已安装 dsh CLI、Node ≥ 22；`dsh plugin` 内部使用 pnpm。
 
 ## 更新插件
 
